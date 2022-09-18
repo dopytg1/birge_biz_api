@@ -20,6 +20,6 @@ from birge_biz_app import urls as birge_biz_app_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('telegram-api/', include(birge_biz_app_urls)),
+    path('b/', include(birge_biz_app_urls)),
 ]
 
