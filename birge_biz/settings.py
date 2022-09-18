@@ -95,7 +95,7 @@ DATABASES = {
         'NAME': 'birge_biz_db',
         'USER': 'birge_biz_user',
         'PASSWORD': get_secret('DB_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': '192.168.1.44',
         'PORT': '3306',
     }
 }
