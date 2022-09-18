@@ -6,7 +6,7 @@ from rest_framework import permissions
 from .models import VerifiedDeliverer
 from django.contrib.auth import login, logout
 
-from .serializers import LoginSerializer, UserSerializer
+from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
 
 
 class VerifiedDelivererApiView(APIView):
@@ -26,9 +26,16 @@ class VerifiedDelivererApiView(APIView):
             return Response({"result": False}, status=status.HTTP_404_NOT_FOUND)
 
 
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = RegisterSerializer
+
+
 class LoginView(APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginSerializer
 
     def post(self, request, format=None):
         serializer = LoginSerializer(data=self.request.data,
