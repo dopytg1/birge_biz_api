@@ -5,8 +5,16 @@ from rest_framework import status, generics
 from rest_framework import permissions
 from .models import VerifiedDeliverer
 from django.contrib.auth import login, logout
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import LoginSerializer, UserSerializer, RegisterSerializer
+
+
+class seeUser(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (permissions.IsAuthenticated, )
+    serializer_class = UserSerializer
 
 
 class VerifiedDelivererApiView(APIView):
@@ -48,10 +56,10 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-
     def post(self, request, format=None):
         logout(request)
         return Response(None, status=status.HTTP_204_NO_CONTENT)
+
 
 class ProfileView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
@@ -59,3 +67,20 @@ class ProfileView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+        token['email'] = user.email
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
